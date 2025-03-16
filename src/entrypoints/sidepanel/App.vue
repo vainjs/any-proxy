@@ -1,23 +1,8 @@
 <script setup lang="ts">
-import { CodeIcon, Fullscreen1Icon } from 'tdesign-icons-vue-next'
 import { RouterView } from 'vue-router'
-import { EVENT_MESSAGE_ACTION } from '@/enum'
-
-const menuItems = [
-  {
-    label: i18n.t('staticResources'),
-    icon: CodeIcon,
-    key: '/'
-  }
-  // {
-  //   key: '/api',
-  //   icon: InternetIcon,
-  //   label: 'API'
-  // }
-]
+import { EVENT_MESSAGE_ACTION, MENU_ITEMS } from '@/enum'
 
 const openWindow = () => {
-  // @ts-ignore
   browser.runtime.sendMessage({ action: EVENT_MESSAGE_ACTION.CLOSE_SIDE_PANEL })
 }
 </script>
@@ -28,41 +13,20 @@ const openWindow = () => {
       <RouterView />
     </main>
     <aside :class="$style.aside">
-      <t-menu
-        :default-value="menuItems[0].key"
-        :width="['200px', '50px']"
-        :class="$style.menu"
-        theme="light"
-        collapsed
-      >
-        <template #logo>
-          <div :class="$style.fullscreen">
-            <t-button
-              @click="openWindow"
-              shape="circle"
-              variant="text"
-            >
-              <template #icon>
-                <Fullscreen1Icon size="24px" />
-              </template>
-            </t-button>
-          </div>
+      <v-tooltip :text="i18n.t('fullscreen')">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" icon="mdi-fullscreen" variant="plain" rounded="0" @click="openWindow" />
         </template>
-        <t-menu-item
-          v-for="item in menuItems"
-          :value="item.key"
-          :key="item.key"
-          :to="item.key"
-        >
-          <template #icon>
-            <component
-              :is="item.icon"
-              size="24px"
-            />
+      </v-tooltip>
+      <v-tabs direction="vertical" color="primary">
+        <v-tooltip v-for="item in MENU_ITEMS" :key="item.key" location="right" :text="item.label">
+          <template #activator="{ props }">
+            <v-tab :value="item.key" v-bind="props" :class="$style.tab" height="42">
+              <v-icon :icon="item.icon" size="20" />
+            </v-tab>
           </template>
-          {{ item.label }}
-        </t-menu-item>
-      </t-menu>
+        </v-tooltip>
+      </v-tabs>
     </aside>
   </section>
 </template>
@@ -77,7 +41,7 @@ const openWindow = () => {
 .main {
   flex: 1;
   width: 0;
-  padding: 12px 0;
+  padding: 6px 0 12px 0;
   border-radius: 12px;
   background: #fff;
 }
@@ -85,21 +49,12 @@ const openWindow = () => {
 .aside {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 4px;
 
-  .fullscreen {
-    margin: 0 !important;
-    display: flex;
-    align-items: center;
+  .tab {
+    min-width: 42px !important;
+    padding: 0 !important;
     justify-content: center;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-  }
-
-  .menu {
-    background: #f3f3f3;
   }
 }
 </style>

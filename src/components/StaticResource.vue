@@ -42,15 +42,9 @@ watch(
 <template>
   <section :class="$style.container">
     <header :class="$style.header">
-      <t-switch
-        v-model="switchConfig"
-        theme="primary"
-      />
+      <v-switch v-model="switchConfig" color="primary" density="compact" hide-details />
     </header>
-    <Codemirror
-      :class="$style.codemirror"
-      v-model="configJson"
-    />
+    <Codemirror :class="$style.codemirror" v-model="configJson" />
   </section>
 </template>
 
@@ -63,12 +57,11 @@ watch(
 }
 
 .header {
-  height: 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
-  color: var(--td-text-color-secondary);
+  padding: 0 8px;
 }
 
 .codemirror {

@@ -1,3 +1,5 @@
 {
-  "staticResources": "Static Resources"
+  "exitFullscreen": "Switch to side panel",
+  "staticResources": "Static Resources",
+  "fullscreen": "Fullscreen"
 }

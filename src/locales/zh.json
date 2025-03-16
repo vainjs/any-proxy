@@ -1,3 +1,5 @@
 {
-  "staticResources": "静态资源"
+  "exitFullscreen": "切换到侧边栏",
+  "staticResources": "静态资源",
+  "fullscreen": "打开整页"
 }

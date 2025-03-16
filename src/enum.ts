@@ -8,3 +8,11 @@ export enum EVENT_MESSAGE_ACTION {
   CLOSE_SIDE_PANEL = 'CLOSE_SIDE_PANEL',
   OPEN_SIDE_PANEL = 'OPEN_SIDE_PANEL'
 }
+
+export const MENU_ITEMS = [
+  {
+    label: i18n.t('staticResources'),
+    icon: 'mdi-xml',
+    key: '/'
+  }
+]

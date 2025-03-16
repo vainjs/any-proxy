@@ -1,6 +1,4 @@
-import { TDesignResolver } from 'unplugin-vue-components/resolvers'
-import Components from 'unplugin-vue-components/vite'
-import AutoImport from 'unplugin-auto-import/vite'
+import vuetify from 'vite-plugin-vuetify'
 import { defineConfig } from 'wxt'
 
 // See https://wxt.dev/api/config.html
@@ -14,21 +12,6 @@ export default defineConfig({
     name: 'AnyProxy'
   },
   vite: () => ({
-    plugins: [
-      AutoImport({
-        resolvers: [
-          TDesignResolver({
-            library: 'vue-next'
-          })
-        ]
-      }),
-      Components({
-        resolvers: [
-          TDesignResolver({
-            library: 'vue-next'
-          })
-        ]
-      })
-    ]
+    plugins: [vuetify()]
   })
 })
