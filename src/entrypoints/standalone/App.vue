@@ -19,7 +19,7 @@ const closeWindow = () => {
         </v-tooltip>
       </div>
       <v-tabs direction="vertical" color="primary" :class="$style.tabSlider">
-        <v-tab v-for="item in MENU_ITEMS" :key="item.key" :value="item.key" :prepend-icon="item.icon">
+        <v-tab v-for="item in MENU_ITEMS" :key="item.path" :value="item.path" :prepend-icon="item.icon" :to="item.path">
           {{ item.label }}
         </v-tab>
       </v-tabs>

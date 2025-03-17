@@ -15,27 +15,23 @@ export const DEFAULT_RULE: InterceptRule = {
 }
 
 export const VALIDATION_RULES = {
-  pattern: [{ required: true, message: '请输入匹配规则' }],
-  'response.status': [
-    { required: true, message: '请输入状态码' },
-    {
-      validator: (v: number) => Number.isInteger(v) && v >= 100 && v < 600,
-      message: '状态码必须是100-599之间的整数'
+  pattern: [(v: string) => !!v || '请输入匹配规则'],
+  status: [
+    (v: number) => !!v || '请输入状态码',
+    (v: number) => {
+      v = Number(v)
+      return (Number.isInteger(v) && v >= 100 && v < 600) || '状态码必须是100-599之间的整数'
     }
   ],
-  'response.data': [
-    { required: true, message: '请输入响应数据' },
-    {
-      validator: (v: string) => {
-        try {
-          JSON.parse(v)
-          return true
-        } catch {
-          return false
-        }
-      },
-      message: '响应数据必须是 JSON 格式',
-      trigger: 'blur'
+  responseData: [
+    (v: string) => !!v || '请输入响应数据',
+    (v: string) => {
+      try {
+        JSON.parse(v)
+        return true
+      } catch {
+        return '响应数据必须是 JSON 格式'
+      }
     }
   ]
 }

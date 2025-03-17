@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { type InterceptRule } from '@/type'
-import { AddIcon, DeleteIcon } from 'tdesign-icons-vue-next'
-import { DialogPlugin } from 'tdesign-vue-next'
 import { ref } from 'vue'
 import { saveRules, getRules, DEFAULT_RULE } from '@/utils'
-import RuleDialog from './RuleDialog.vue'
+import ApiRuleDialog from './ApiRuleDialog.vue'
 
 const formState = ref<InterceptRule>({ ...DEFAULT_RULE })
 const rules = ref<InterceptRule[]>([])
@@ -35,17 +33,17 @@ const onSaveRule = (newRule: InterceptRule) => {
   }
 }
 
-const deleteRule = async (index: number) => {
-  const confirm = DialogPlugin.confirm({
-    header: '删除规则',
-    body: '确认删除该规则？',
-    width: '90%',
-    onConfirm: () => {
-      rules.value.splice(index, 1)
-      confirm.destroy()
-    }
-  })
-}
+// const deleteRule = async (index: number) => {
+//   const confirm = DialogPlugin.confirm({
+//     header: '删除规则',
+//     body: '确认删除该规则？',
+//     width: '90%',
+//     onConfirm: () => {
+//       rules.value.splice(index, 1)
+//       confirm.destroy()
+//     }
+//   })
+// }
 
 const toggleRule = (index: number) => {
   const rule = rules.value[index]
@@ -59,61 +57,39 @@ watch(
   },
   { deep: true }
 )
+
+console.log(rules.value)
 </script>
 
 <template>
   <div :class="$style.container">
     <header :class="$style.header">
-      <t-switch theme="primary" />
-      <t-button
-        @click="onAdd"
-        theme="primary"
-        shape="circle"
-      >
-        <template #icon>
-          <AddIcon />
-        </template>
-      </t-button>
+      <v-switch color="primary" density="compact" hide-details />
+      <v-btn icon="mdi-plus" variant="plain" @click="onAdd" />
     </header>
+    <v-card>
+      <v-list>
+        <v-list-item v-for="(rule, index) in rules" :key="rule.pattern" @click="onEdit(index)">
+          <v-list-item-title>{{ rule.pattern }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-card>
 
-    <t-list
-      :class="$style.list"
-      stripe
-    >
-      <t-list-item
-        v-for="(rule, index) in rules"
-        :class="$style.cursor"
-        @click="onEdit(index)"
-        :key="rule.pattern"
-      >
+    <!-- <t-list :class="$style.list" stripe>
+      <t-list-item v-for="(rule, index) in rules" :class="$style.cursor" @click="onEdit(index)" :key="rule.pattern">
         <span :class="$style.ellipsis">
           {{ rule.pattern }}
         </span>
         <template #action>
-          <t-space
-            :class="$style.action"
-            @click.stop
-          >
-            <t-switch
-              @change="toggleRule(index)"
-              :value="rule.enabled"
-              size="small"
-            />
-            <DeleteIcon
-              @click="deleteRule(index)"
-              :class="$style.cursor"
-              size="medium"
-            />
+          <t-space :class="$style.action" @click.stop>
+            <t-switch @change="toggleRule(index)" :value="rule.enabled" size="small" />
+            <DeleteIcon @click="deleteRule(index)" :class="$style.cursor" size="medium" />
           </t-space>
         </template>
-      </t-list-item>
-    </t-list>
+</t-list-item>
+</t-list> -->
 
-    <RuleDialog
-      v-model:visible="dialog"
-      v-model="formState"
-      @save="onSaveRule"
-    />
+    <ApiRuleDialog v-model:visible="dialog" v-model="formState" @ok="onSaveRule" />
   </div>
 </template>
 

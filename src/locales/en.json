@@ -1,5 +1,12 @@
 {
   "exitFullscreen": "Switch to side panel",
   "staticResources": "Static Resources",
-  "fullscreen": "Fullscreen"
+  "fullscreen": "Fullscreen",
+  "api": "API",
+  "matchRule": "Match Rule (Support Regular Expression)",
+  "status": "Status Code (100-599)",
+  "responseData": "Response Data",
+  "addRule": "Add Rule",
+  "close": "Close",
+  "ok": "Save"
 }

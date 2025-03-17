@@ -1,5 +1,12 @@
 {
+  "matchRule": "匹配规则（支持正则表达式）",
   "exitFullscreen": "切换到侧边栏",
   "staticResources": "静态资源",
-  "fullscreen": "打开整页"
+  "status": "状态码 (100-599)",
+  "responseData": "响应数据",
+  "fullscreen": "打开整页",
+  "addRule": "添加规则",
+  "close": "关闭",
+  "api": "API",
+  "ok": "保存"
 }

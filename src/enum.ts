@@ -13,6 +13,11 @@ export const MENU_ITEMS = [
   {
     label: i18n.t('staticResources'),
     icon: 'mdi-xml',
-    key: '/'
+    path: '/'
+  },
+  {
+    label: i18n.t('api'),
+    icon: 'mdi-api',
+    path: '/api'
   }
 ]

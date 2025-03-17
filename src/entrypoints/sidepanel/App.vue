@@ -19,9 +19,9 @@ const openWindow = () => {
         </template>
       </v-tooltip>
       <v-tabs direction="vertical" color="primary">
-        <v-tooltip v-for="item in MENU_ITEMS" :key="item.key" location="right" :text="item.label">
+        <v-tooltip v-for="item in MENU_ITEMS" :key="item.path" location="right" :text="item.label">
           <template #activator="{ props }">
-            <v-tab :value="item.key" v-bind="props" :class="$style.tab" height="42">
+            <v-tab :value="item.path" v-bind="props" :class="$style.tab" height="42" :to="item.path">
               <v-icon :icon="item.icon" size="20" />
             </v-tab>
           </template>
