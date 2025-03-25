@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import { EVENT_MESSAGE_ACTION, MENU_ITEMS } from '@/enum'
+import { openHelp, openFeedback } from '@/utils'
 
-const openWindow = () => {
+const menuSize = 40
+
+const openFullscreen = () => {
   browser.runtime.sendMessage({ action: EVENT_MESSAGE_ACTION.CLOSE_SIDE_PANEL })
 }
 </script>
@@ -15,18 +18,40 @@ const openWindow = () => {
     <aside :class="$style.aside">
       <v-tooltip :text="i18n.t('fullscreen')">
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" icon="mdi-fullscreen" variant="plain" rounded="0" @click="openWindow" />
+          <v-btn v-bind="props" variant="plain" rounded="0" @click="openFullscreen" :width="menuSize" :height="menuSize"
+            icon>
+            <v-icon icon="mdi-fullscreen" size="22" />
+          </v-btn>
         </template>
       </v-tooltip>
-      <v-tabs direction="vertical" color="primary">
-        <v-tooltip v-for="item in MENU_ITEMS" :key="item.path" location="right" :text="item.label">
-          <template #activator="{ props }">
-            <v-tab :value="item.path" v-bind="props" :class="$style.tab" height="42" :to="item.path">
-              <v-icon :icon="item.icon" size="20" />
-            </v-tab>
-          </template>
-        </v-tooltip>
-      </v-tabs>
+      <div :class="$style.tabs">
+        <v-tabs direction="vertical" color="primary" mobile>
+          <v-tooltip v-for="item in MENU_ITEMS" :key="item.path" location="right" :text="item.label">
+            <template #activator="{ props }">
+              <v-tab :value="item.path" v-bind="props" :class="$style.tab" :min-width="menuSize" :height="menuSize"
+                :width="menuSize" :to="item.path" icon>
+                <v-icon :icon="item.icon" size="20" />
+              </v-tab>
+            </template>
+          </v-tooltip>
+        </v-tabs>
+      </div>
+      <v-tooltip :text="i18n.t('help')">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" variant="plain" rounded="0" @click="openHelp" :width="menuSize" :height="menuSize - 10"
+            icon>
+            <v-icon icon="mdi-tooltip-question-outline" size="20" />
+          </v-btn>
+        </template>
+      </v-tooltip>
+      <v-tooltip :text="i18n.t('feedback')">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" variant="plain" rounded="0" @click="openFeedback" :width="menuSize"
+            :height="menuSize - 10" icon>
+            <v-icon icon="mdi-email-outline" size="20" />
+          </v-btn>
+        </template>
+      </v-tooltip>
     </aside>
   </section>
 </template>
@@ -49,11 +74,14 @@ const openWindow = () => {
 .aside {
   display: flex;
   flex-direction: column;
+  padding: 6px 0;
   gap: 4px;
 
+  .tabs {
+    flex: 1;
+  }
+
   .tab {
-    min-width: 42px !important;
-    padding: 0 !important;
     justify-content: center;
   }
 }

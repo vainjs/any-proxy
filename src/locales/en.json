@@ -8,5 +8,7 @@
   "responseData": "Response Data",
   "addRule": "Add Rule",
   "close": "Close",
-  "ok": "Save"
+  "ok": "Save",
+  "feedback": "Feedback",
+  "help": "Help"
 }

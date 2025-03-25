@@ -56,3 +56,11 @@ export async function isValidTab(tabId?: number) {
   }
   return false
 }
+
+export function openHelp() {
+  window.open('https://github.com/vainjs/any-proxy/blob/main/README.md', '_blank')
+}
+
+export function openFeedback() {
+  window.open('https://github.com/vainjs/any-proxy/issues', '_blank')
+}

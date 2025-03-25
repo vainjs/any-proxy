@@ -8,5 +8,7 @@
   "addRule": "添加规则",
   "close": "关闭",
   "api": "API",
-  "ok": "保存"
+  "ok": "保存",
+  "feedback": "反馈",
+  "help": "帮助中心"
 }

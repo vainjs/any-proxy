@@ -9,7 +9,6 @@ export default defineBackground(async () => {
 
   const updateRules = async () => {
     const existingRules = await browser.declarativeNetRequest.getDynamicRules()
-    console.log('existingRules', existingRules)
     const removeRuleIds = map(existingRules, 'id')
     if (!isEmpty(removeRuleIds)) {
       await browser.declarativeNetRequest.updateDynamicRules({ removeRuleIds })
@@ -18,7 +17,6 @@ export default defineBackground(async () => {
     const switchEnabled = await getSwitchConfig()
     if (!switchEnabled) return
     const addRules = getStaticResourceRules(await getConfig())
-    console.log('addRules', addRules)
     if (isEmpty(addRules)) return
     browser.declarativeNetRequest.updateDynamicRules({ addRules })
   }
