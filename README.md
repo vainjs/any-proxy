@@ -1,6 +1,23 @@
 # AnyProxy
 
-A Chrome extension that easily forwards any network resources without needing to update the server.
+AnyProxy is a powerful Chrome extension that allows you to easily redirect network resources without server-side modifications. It provides a flexible way to forward any web requests to different destinations using regex-based rules.
+
+Key Features:
+
+- Simple Configuration: Set up forwarding rules with regex patterns
+- No Server Changes: Redirect requests without modifying the target server
+- Real-time Updates: Rules take effect immediately without browser restart
+- Developer Friendly: Perfect for local development and testing
+- Resource Types: Support for JavaScript, CSS, and API
+
+Perfect for:
+
+- Frontend developers testing local changes
+- QA engineers comparing different versions
+- Debug and troubleshoot network issues
+- A/B testing without server deployment
+
+Simply configure your forwarding rules and AnyProxy will handle the rest, making web resource redirection easier than ever.
 
 ## Usage
 
