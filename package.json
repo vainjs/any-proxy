@@ -3,7 +3,7 @@
   "version": "0.2.1",
   "private": true,
   "packageManager": "pnpm@9.12.1",
-  "description": "Easily forwards any network resources without needing to update the server.",
+  "description": "Easily redirect network resources without needing to update the server.",
   "type": "module",
   "scripts": {
     "dev": "wxt",

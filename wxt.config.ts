@@ -9,7 +9,10 @@ export default defineConfig({
     permissions: ['declarativeNetRequest', 'background', 'storage'],
     host_permissions: ['<all_urls>'],
     default_locale: 'en',
-    name: 'AnyProxy'
+    name: 'AnyProxy',
+    action: {
+      default_title: '__MSG_actionTitle__'
+    }
   },
   vite: () => ({
     plugins: [vuetify()]

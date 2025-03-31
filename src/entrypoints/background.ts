@@ -3,9 +3,17 @@ import { map, isEmpty, get } from 'lodash-es'
 import { getConfig, getStaticResourceRules, getSwitchConfig, isValidTab } from '@/utils'
 import { EVENT_MESSAGE_ACTION } from '@/enum'
 
-export default defineBackground(async () => {
+export default defineBackground(() => {
   let standaloneTabId: number | undefined = undefined
-  // console.log('Current UI language:', browser.i18n.getUILanguage())
+
+  const setBadgeStatus = async () => {
+    let shouldShowBadge = await getSwitchConfig()
+    if (shouldShowBadge) {
+      const existingRules = await browser.declarativeNetRequest.getDynamicRules()
+      shouldShowBadge = !isEmpty(existingRules)
+    }
+    browser.action.setBadgeText({ text: shouldShowBadge ? '1' : '' })
+  }
 
   const updateRules = async () => {
     const existingRules = await browser.declarativeNetRequest.getDynamicRules()
@@ -18,20 +26,24 @@ export default defineBackground(async () => {
     if (!switchEnabled) return
     const addRules = getStaticResourceRules(await getConfig())
     if (isEmpty(addRules)) return
-    browser.declarativeNetRequest.updateDynamicRules({ addRules })
+    await browser.declarativeNetRequest.updateDynamicRules({ addRules })
   }
 
-  updateRules()
+  ;(async () => {
+    await updateRules()
+    await setBadgeStatus()
+  })()
 
-  browser.storage.onChanged.addListener((_, areaName) => {
-    if (areaName === 'local') {
-      updateRules()
-    }
+  browser.storage.onChanged.addListener(async (changes, areaName) => {
+    if (areaName !== 'local') return
+    await updateRules()
+    await setBadgeStatus()
   })
 
   browser.runtime.onInstalled.addListener(() => {
     // @ts-ignore
     browser.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+    browser.action.setBadgeTextColor({ color: '#e63757' })
   })
 
   browser.runtime.onMessage.addListener(async (message, sender) => {
