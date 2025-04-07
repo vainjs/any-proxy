@@ -8,6 +8,7 @@ import {
 } from '@codemirror/view'
 import { type CSSProperties, shallowRef, onMounted, onBeforeUnmount } from 'vue'
 import { json, jsonParseLinter } from '@codemirror/lang-json'
+import { closeBrackets } from '@codemirror/autocomplete'
 import { bracketMatching } from '@codemirror/language'
 import { minimalSetup, EditorView } from 'codemirror'
 import { indentWithTab } from '@codemirror/commands'
@@ -27,8 +28,7 @@ const props = defineProps<{
   class?: string
 }>()
 
-const { showLineNumber = true, placeholder, style } = props
-
+const { showLineNumber, placeholder, style } = props
 const model = defineModel<string>()
 const container = shallowRef<HTMLDivElement>()
 const view = shallowRef<EditorView>()
@@ -89,6 +89,7 @@ onMounted(() => {
     EditorView.lineWrapping,
     highlightActiveLine(),
     bracketMatching(),
+    closeBrackets(),
     minimalSetup,
     baseTheme,
     json(),
@@ -109,6 +110,10 @@ onMounted(() => {
       indentWithTab,
       {
         key: 'Mod-Shift-f',
+        run: formatJson
+      },
+      {
+        key: 'Mod-s',
         run: formatJson
       }
     ])
@@ -150,11 +155,7 @@ defineExpose({ name: 'VCodemirror' })
 </script>
 
 <template>
-  <div
-    :class="cls('v-codemirror', props.class)"
-    ref="container"
-    :style="style"
-  />
+  <div :class="cls('v-codemirror', props.class)" ref="container" :style="style" />
 </template>
 
 <style lang="scss">

@@ -1,8 +1,10 @@
 # AnyProxy
 
+English ｜ [简体中文](./README-zh_CN.md)
+
 AnyProxy is a powerful Chrome extension that allows you to easily redirect network resources without server-side modifications. It provides a flexible way to forward any web requests to different destinations using regex-based rules.
 
-Key Features:
+#### Key Features:
 
 - Simple Configuration: Set up forwarding rules with regex patterns
 - No Server Changes: Redirect requests without modifying the target server
@@ -10,14 +12,12 @@ Key Features:
 - Developer Friendly: Perfect for local development and testing
 - Resource Types: Support for JavaScript, CSS, and API
 
-Perfect for:
+#### Perfect for:
 
 - Frontend developers testing local changes
 - QA engineers comparing different versions
 - Debug and troubleshoot network issues
 - A/B testing without server deployment
-
-Simply configure your forwarding rules and AnyProxy will handle the rest, making web resource redirection easier than ever.
 
 ## Usage
 
@@ -33,7 +33,7 @@ For detailed information, please refer to:
 
 **Note:** The only difference is that capture group references in regexSubstitution are changed from `\1`-`\9` to `$1`-`$9`.
 
-### Example Configuration
+#### Example Configuration
 
 ```json
 {
