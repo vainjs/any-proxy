@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { type InterceptRule } from '@/type'
+import cls from 'classnames'
 import { ref } from 'vue'
 import { saveRules, getRules, DEFAULT_RULE } from '@/utils'
+import { MENU_SIZE } from '@/enum'
 import ApiRuleDialog from './ApiRuleDialog.vue'
+import Confirm from './VConfirm.vue'
 
 const formState = ref<InterceptRule>({ ...DEFAULT_RULE })
 const rules = ref<InterceptRule[]>([])
+const confirmDialog = ref(false)
 const dialog = ref(false)
 const editIndex = ref(-1)
 
@@ -33,21 +37,14 @@ const onSaveRule = (newRule: InterceptRule) => {
   }
 }
 
-// const deleteRule = async (index: number) => {
-//   const confirm = DialogPlugin.confirm({
-//     header: '删除规则',
-//     body: '确认删除该规则？',
-//     width: '90%',
-//     onConfirm: () => {
-//       rules.value.splice(index, 1)
-//       confirm.destroy()
-//     }
-//   })
-// }
+const onClickDelete = (index: number) => {
+  editIndex.value = index
+  confirmDialog.value = true
+}
 
-const toggleRule = (index: number) => {
-  const rule = rules.value[index]
-  rules.value.splice(index, 1, { ...rule, enabled: !rule.enabled })
+const onDelete = () => {
+  if (editIndex.value === -1) return
+  rules.value.splice(editIndex.value, 1)
 }
 
 watch(
@@ -57,76 +54,63 @@ watch(
   },
   { deep: true }
 )
-
-console.log(rules.value)
 </script>
 
 <template>
   <div :class="$style.container">
     <header :class="$style.header">
       <v-switch color="primary" density="compact" hide-details />
-      <v-btn icon="mdi-plus" variant="plain" @click="onAdd" />
+      <v-btn icon="mdi-plus" variant="plain" @click="onAdd" :width="MENU_SIZE" :height="MENU_SIZE" />
     </header>
-    <v-card>
-      <v-list>
-        <v-list-item v-for="(rule, index) in rules" :key="rule.pattern" @click="onEdit(index)">
+    <main :class="$style.main">
+      <v-list rounded="sm">
+        <v-list-item v-for="(rule, index) in rules" :key="rule.pattern" @click="onEdit(index)"
+          :class="cls($style.item, { [$style['item-enabled']]: rule.enabled })">
           <v-list-item-title>{{ rule.pattern }}</v-list-item-title>
+          <v-list-item-subtitle v-if="rule.description" class="text-high-emphasis">
+            {{ rule.description }}
+          </v-list-item-subtitle>
+          <template v-slot:append>
+            <v-btn icon="mdi-close" variant="plain" density="compact" size="small" @click.stop="onClickDelete(index)" />
+          </template>
         </v-list-item>
       </v-list>
-    </v-card>
-
-    <!-- <t-list :class="$style.list" stripe>
-      <t-list-item v-for="(rule, index) in rules" :class="$style.cursor" @click="onEdit(index)" :key="rule.pattern">
-        <span :class="$style.ellipsis">
-          {{ rule.pattern }}
-        </span>
-        <template #action>
-          <t-space :class="$style.action" @click.stop>
-            <t-switch @change="toggleRule(index)" :value="rule.enabled" size="small" />
-            <DeleteIcon @click="deleteRule(index)" :class="$style.cursor" size="medium" />
-          </t-space>
-        </template>
-</t-list-item>
-</t-list> -->
+    </main>
 
     <ApiRuleDialog v-model:visible="dialog" v-model="formState" @ok="onSaveRule" />
+    <Confirm v-model:visible="confirmDialog" @confirm="onDelete" :title="i18n.t('deleteTitle')"
+      :content="i18n.t('deleteContent')" />
   </div>
 </template>
 
 <style lang="scss" module>
 .container {
-  height: 100%;
   display: flex;
   flex-direction: column;
+  height: 100%;
   padding: 0 6px;
 }
 
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 6px;
+  padding: 0 8px;
 }
 
-.list {
+.main {
   height: 0;
   flex: 1;
-
-  .action {
-    color: var(--td-text-color-secondary);
-  }
-
-  .ellipsis {
-    flex: 1;
-    width: 0;
-    margin-right: 16px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  overflow-y: auto;
 }
 
-.cursor {
-  cursor: pointer;
+.item {
+  margin-bottom: 6px;
+  background: rgba(var(--v-theme-surface-light), 0.6);
+
+  &-enabled {
+    background: rgba(var(--v-theme-info), 0.1);
+  }
 }
 </style>

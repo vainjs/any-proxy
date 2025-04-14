@@ -38,17 +38,21 @@ const onOk = async () => {
 </script>
 
 <template>
-  <v-dialog v-model="modelVisible" @confirm="onOk" width="90%">
+  <v-dialog v-model="modelVisible" @confirm="onOk" width="95%">
     <v-card :title="i18n.t('addRule')">
       <v-card-text>
         <v-form ref="form" color="primary">
+          <div :class="$style.switch">
+            <v-switch v-model="modelValue.enabled" color="primary" density="compact" hide-details />
+          </div>
           <v-text-field v-model="modelValue.pattern" :label="i18n.t('matchRule')" :rules="VALIDATION_RULES.pattern" />
           <v-text-field v-model="modelValue.response.status" type="number" :label="i18n.t('status')"
             :rules="VALIDATION_RULES.status" />
+          <v-text-field v-model="modelValue.description" :label="i18n.t('description')" />
           <Codemirror v-model="responseData" />
         </v-form>
       </v-card-text>
-      <v-divider></v-divider>
+      <v-divider />
       <v-card-actions>
         <v-btn :text="i18n.t('close')" variant="plain" @click="closeDialog" />
         <v-btn :text="i18n.t('ok')" variant="tonal" color="primary" @click="onOk" />
@@ -56,3 +60,10 @@ const onOk = async () => {
     </v-card>
   </v-dialog>
 </template>
+
+
+<style lang="scss" module>
+.switch {
+  padding: 0px 6px 6px;
+}
+</style>

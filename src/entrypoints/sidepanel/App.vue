@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import { EVENT_MESSAGE_ACTION, MENU_ITEMS } from '@/enum'
+import { EVENT_MESSAGE_ACTION, MENU_ITEMS, MENU_SIZE } from '@/enum'
 import { openHelp, openFeedback } from '@/utils'
-
-const menuSize = 40
 
 const openFullscreen = () => {
   browser.runtime.sendMessage({ action: EVENT_MESSAGE_ACTION.CLOSE_SIDE_PANEL })
@@ -18,8 +16,8 @@ const openFullscreen = () => {
     <aside :class="$style.aside">
       <v-tooltip :text="i18n.t('fullscreen')">
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" variant="plain" rounded="0" @click="openFullscreen" :width="menuSize" :height="menuSize"
-            icon>
+          <v-btn v-bind="props" variant="plain" rounded="0" @click="openFullscreen" :width="MENU_SIZE"
+            :height="MENU_SIZE" icon>
             <v-icon icon="mdi-fullscreen" size="22" />
           </v-btn>
         </template>
@@ -28,8 +26,8 @@ const openFullscreen = () => {
         <v-tabs direction="vertical" color="primary" mobile>
           <v-tooltip v-for="item in MENU_ITEMS" :key="item.path" location="right" :text="item.label">
             <template #activator="{ props }">
-              <v-tab :value="item.path" v-bind="props" :class="$style.tab" :min-width="menuSize" :height="menuSize"
-                :width="menuSize" :to="item.path" icon>
+              <v-tab :value="item.path" v-bind="props" :class="$style.tab" :min-width="MENU_SIZE" :height="MENU_SIZE"
+                :width="MENU_SIZE" :to="item.path" icon>
                 <v-icon :icon="item.icon" size="20" />
               </v-tab>
             </template>
@@ -38,16 +36,16 @@ const openFullscreen = () => {
       </div>
       <v-tooltip :text="i18n.t('help')">
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" variant="plain" rounded="0" @click="openHelp" :width="menuSize" :height="menuSize - 10"
-            icon>
+          <v-btn v-bind="props" variant="plain" rounded="0" @click="openHelp" :width="MENU_SIZE"
+            :height="MENU_SIZE - 10" icon>
             <v-icon icon="mdi-tooltip-question-outline" size="20" />
           </v-btn>
         </template>
       </v-tooltip>
       <v-tooltip :text="i18n.t('feedback')">
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" variant="plain" rounded="0" @click="openFeedback" :width="menuSize"
-            :height="menuSize - 10" icon>
+          <v-btn v-bind="props" variant="plain" rounded="0" @click="openFeedback" :width="MENU_SIZE"
+            :height="MENU_SIZE - 10" icon>
             <v-icon icon="mdi-email-outline" size="20" />
           </v-btn>
         </template>

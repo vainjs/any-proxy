@@ -4,14 +4,14 @@ import { API_STORAGE_KEY } from '../enum'
 
 export const DEFAULT_RULE: InterceptRule = {
   pattern: 'api.example.com/test',
+  enabled: true,
   response: {
     status: 200,
     data: { message: 'This is a mocked response' },
     headers: {
       'Content-Type': 'application/json'
     }
-  },
-  enabled: true
+  }
 }
 
 export const VALIDATION_RULES = {
