@@ -7,6 +7,10 @@ const emit = defineEmits<{
   ok: [rule: InterceptRule]
 }>()
 
+const props = defineProps<{
+  isEdit?: boolean
+}>()
+
 const modelValue = defineModel<InterceptRule>({ default: {} })
 const modelVisible = defineModel<boolean>('visible')
 const form = ref()
@@ -38,8 +42,8 @@ const onOk = async () => {
 </script>
 
 <template>
-  <v-dialog v-model="modelVisible" @confirm="onOk" width="95%">
-    <v-card :title="i18n.t('addRule')">
+  <v-dialog v-model="modelVisible" @confirm="onOk" width="95%" max-width="640px">
+    <v-card :title="props.isEdit ? i18n.t('editRule') : i18n.t('addRule')">
       <v-card-text>
         <v-form ref="form" color="primary">
           <div :class="$style.switch">

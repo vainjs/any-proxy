@@ -28,8 +28,8 @@ const props = defineProps<{
   class?: string
 }>()
 
-const { showLineNumber, placeholder, style } = props
 const model = defineModel<string>()
+const { showLineNumber, placeholder, style } = props
 const container = shallowRef<HTMLDivElement>()
 const view = shallowRef<EditorView>()
 const baseTheme = EditorView.theme(

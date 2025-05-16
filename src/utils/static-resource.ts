@@ -1,7 +1,7 @@
-import type { DeclarativeNetRequest } from 'wxt/browser'
+import type { Browser } from 'wxt/browser'
 import type { ProxyConfig } from '@/type'
-import { storage } from 'wxt/storage'
-import { debounce, get, uniqueId, reduce, replace } from 'lodash-es'
+import { storage } from '#imports'
+import { debounce, get, reduce, replace } from 'lodash-es'
 import { STATIC_STORAGE_KEY, STATIC_STORAGE_SWITCH_KEY } from '@/enum'
 
 export const DEFAULT_CONFIG: ProxyConfig = {
@@ -22,16 +22,16 @@ export const saveConfig = debounce(async (configJson?: string) => {
 }, 1500)
 
 export function getStaticResourceRules(config: ProxyConfig) {
-  const idBase = +uniqueId()
   return reduce(
     get(config, 'proxy', []),
     (prev, rule, index) => {
       const [regexFilter, regexSubstitution] = rule
       if (!regexFilter || !regexSubstitution) return prev
       prev.push({
-        id: idBase + index,
+        id: index + 1,
         priority: 1,
         action: {
+          // @ts-ignore
           type: 'redirect',
           redirect: {
             regexSubstitution: replace(regexSubstitution, /\$(\d+)/g, '\\$1')
@@ -39,12 +39,13 @@ export function getStaticResourceRules(config: ProxyConfig) {
         },
         condition: {
           regexFilter,
+          // @ts-ignore
           resourceTypes: ['script', 'stylesheet']
         }
       })
       return prev
     },
-    [] as DeclarativeNetRequest.Rule[]
+    [] as Browser.declarativeNetRequest.Rule[]
   )
 }
 

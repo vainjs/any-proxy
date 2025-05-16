@@ -77,7 +77,7 @@ watch(
       </v-list>
     </main>
 
-    <ApiRuleDialog v-model:visible="dialog" v-model="formState" @ok="onSaveRule" />
+    <ApiRuleDialog v-model:visible="dialog" v-model="formState" @ok="onSaveRule" :is-edit="editIndex !== -1" />
     <Confirm v-model:visible="confirmDialog" @confirm="onDelete" :title="i18n.t('deleteTitle')"
       :content="i18n.t('deleteContent')" />
   </div>
@@ -107,10 +107,10 @@ watch(
 
 .item {
   margin-bottom: 6px;
-  background: rgba(var(--v-theme-surface-light), 0.6);
+  background: rgba(var(--v-theme-surface-light), 0.3);
 
   &-enabled {
-    background: rgba(var(--v-theme-info), 0.1);
+    background: rgba(var(--v-theme-info), 0.08);
   }
 }
 </style>

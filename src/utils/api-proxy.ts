@@ -1,5 +1,5 @@
 import type { InterceptRule } from '../type'
-import { storage } from 'wxt/storage'
+import { storage } from '#imports'
 import { API_STORAGE_KEY } from '../enum'
 
 export const DEFAULT_RULE: InterceptRule = {

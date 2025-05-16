@@ -34,14 +34,13 @@ export default defineBackground(() => {
     await setBadgeStatus()
   })()
 
-  browser.storage.onChanged.addListener(async (changes, areaName) => {
+  browser.storage.onChanged.addListener(async (_, areaName) => {
     if (areaName !== 'local') return
     await updateRules()
     await setBadgeStatus()
   })
 
   browser.runtime.onInstalled.addListener(() => {
-    // @ts-ignore
     browser.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
     browser.action.setBadgeTextColor({ color: '#e63757' })
   })
@@ -52,19 +51,17 @@ export default defineBackground(() => {
     if (action === EVENT_MESSAGE_ACTION.OPEN_SIDE_PANEL) {
       const tabId = get(sender, 'tab.id')
       if (tabId) {
-        // @ts-ignore
         browser.sidePanel.open({ tabId })
         browser.tabs.remove(tabId)
       }
     }
 
     if (action === EVENT_MESSAGE_ACTION.CLOSE_SIDE_PANEL) {
-      // @ts-ignore
       browser.sidePanel.setOptions({ enabled: false })
 
       if (await isValidTab(standaloneTabId)) {
-        await browser.tabs.update(standaloneTabId, { active: true })
-        await browser.tabs.reload(standaloneTabId)
+        await browser.tabs.update(standaloneTabId!, { active: true })
+        await browser.tabs.reload(standaloneTabId!)
       } else {
         const currentTab = await browser.tabs.create({
           // @ts-ignore
@@ -72,7 +69,6 @@ export default defineBackground(() => {
         })
         standaloneTabId = currentTab.id
       }
-      // @ts-ignore
       browser.sidePanel.setOptions({ enabled: true })
     }
 

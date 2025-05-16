@@ -10,10 +10,8 @@ const props = defineProps<{
   title?: string
 }>()
 
-const { cancelText = i18n.t('cancelText'), okText = i18n.t('okText'), content, title } = props
-
-
 const modelVisible = defineModel<boolean>('visible')
+const { cancelText = i18n.t('cancelText'), okText = i18n.t('okText'), content, title } = props
 
 const onCancel = () => {
   modelVisible.value = false
