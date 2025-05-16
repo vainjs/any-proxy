@@ -1,16 +1,14 @@
 import type { InterceptRule } from '../type'
+import { debounce, reduce } from 'lodash-es'
 import { storage } from '#imports'
-import { API_STORAGE_KEY } from '../enum'
+import { API_STORAGE_KEY, API_STORAGE_SWITCH_KEY } from '../enum'
 
 export const DEFAULT_RULE: InterceptRule = {
-  pattern: 'api.example.com/test',
+  pattern: 'http://api.example.com/test',
   enabled: true,
   response: {
     status: 200,
-    data: { message: 'This is a mocked response' },
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    data: { message: 'This is a mocked response' }
   }
 }
 
@@ -36,24 +34,69 @@ export const VALIDATION_RULES = {
   ]
 }
 
-export function createResponse(rule: InterceptRule): Response {
-  const responseBody = JSON.stringify(rule.response.data)
-  const headers = new Headers({
-    'Content-Type': 'application/json',
-    ...rule.response.headers
-  })
-
-  return new Response(responseBody, {
-    status: rule.response.status,
-    headers: headers
-  })
+export function createResponse(rule: InterceptRule) {
+  return `data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(rule.response.data))}`
 }
 
-export async function saveRules(rules: InterceptRule[]) {
+export const saveRules = debounce(async (rules: InterceptRule[]) => {
   await storage.setItem(`local:${API_STORAGE_KEY}`, rules)
-}
+}, 1500)
 
 export async function getRules() {
   const rules = await storage.getItem(`local:${API_STORAGE_KEY}`)
   return (rules || []) as InterceptRule[]
+}
+
+export function saveApiSwitch(value: boolean) {
+  storage.setItem(`local:${API_STORAGE_SWITCH_KEY}`, value)
+}
+
+export async function getApiSwitch() {
+  return (await storage.getItem<boolean>(`local:${API_STORAGE_SWITCH_KEY}`)) ?? false
+}
+
+export function escapeRegExp(string: string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+export async function getApiRules() {
+  const switchEnabled = await getApiSwitch()
+  if (!switchEnabled) return []
+  return reduce(
+    await getRules(),
+    (prev, rule, index) => {
+      const { enabled, pattern } = rule
+      if (!enabled) return prev
+      prev.push({
+        id: index + 30000,
+        priority: 1,
+        action: {
+          type: browser.declarativeNetRequest.RuleActionType.REDIRECT,
+          redirect: {
+            url: createResponse(rule)
+          },
+          responseHeaders: [
+            {
+              operation: browser.declarativeNetRequest.HeaderOperation.APPEND,
+              header: 'Content-Type',
+              value: 'application/json'
+            },
+            {
+              operation: browser.declarativeNetRequest.HeaderOperation.APPEND,
+              header: 'Access-Control-Allow-Origin',
+              value: '*'
+            }
+          ]
+        },
+        condition: {
+          regexFilter: escapeRegExp(pattern),
+          resourceTypes: [browser.declarativeNetRequest.ResourceType.XMLHTTPREQUEST],
+          // @ts-ignore
+          requestMethods: ['post']
+        }
+      })
+      return prev
+    },
+    [] as Browser.declarativeNetRequest.Rule[]
+  )
 }

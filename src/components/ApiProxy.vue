@@ -2,7 +2,7 @@
 import { type InterceptRule } from '@/type'
 import cls from 'classnames'
 import { ref } from 'vue'
-import { saveRules, getRules, DEFAULT_RULE } from '@/utils'
+import { saveRules, getRules, DEFAULT_RULE, getApiSwitch, saveApiSwitch } from '@/utils'
 import { MENU_SIZE } from '@/enum'
 import ApiRuleDialog from './ApiRuleDialog.vue'
 import Confirm from './VConfirm.vue'
@@ -10,11 +10,18 @@ import Confirm from './VConfirm.vue'
 const formState = ref<InterceptRule>({ ...DEFAULT_RULE })
 const rules = ref<InterceptRule[]>([])
 const confirmDialog = ref(false)
+const switchConfig = ref(false)
 const dialog = ref(false)
 const editIndex = ref(-1)
 
-onMounted(async () => {
-  rules.value = await getRules()
+onMounted(() => {
+  getRules().then((v) => {
+    rules.value = v
+  })
+
+  getApiSwitch().then((v) => {
+    switchConfig.value = v
+  })
 })
 
 const onEdit = (index: number) => {
@@ -49,17 +56,22 @@ const onDelete = () => {
 
 watch(
   rules,
-  () => {
-    saveRules(toRaw(rules.value))
+  (v) => {
+    saveRules(toRaw(v))
   },
   { deep: true }
+)
+
+watch(
+  switchConfig,
+  saveApiSwitch,
 )
 </script>
 
 <template>
   <div :class="$style.container">
     <header :class="$style.header">
-      <v-switch color="primary" density="compact" hide-details />
+      <v-switch v-model="switchConfig" color="primary" density="compact" hide-details />
       <v-btn icon="mdi-plus" variant="plain" @click="onAdd" :width="MENU_SIZE" :height="MENU_SIZE" />
     </header>
     <main :class="$style.main">

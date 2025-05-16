@@ -14,8 +14,8 @@ const configJson = ref(formatJson(DEFAULT_CONFIG))
 const switchConfig = ref(false)
 
 onMounted(() => {
-  getConfig().then((config) => {
-    configJson.value = formatJson(config)
+  getConfig().then((v) => {
+    configJson.value = formatJson(v)
   })
   getSwitchConfig().then((v) => {
     switchConfig.value = v
@@ -24,18 +24,12 @@ onMounted(() => {
 
 watch(
   configJson,
-  () => {
-    saveConfig(configJson.value)
-  },
-  { flush: 'post' }
+  saveConfig,
 )
 
 watch(
   switchConfig,
-  () => {
-    saveSwitchConfig(switchConfig.value)
-  },
-  { flush: 'post' }
+  saveSwitchConfig,
 )
 </script>
 

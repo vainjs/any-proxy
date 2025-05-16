@@ -1,18 +1,24 @@
 import type { Message } from '@/type'
 import { map, isEmpty, get } from 'lodash-es'
-import { getConfig, getStaticResourceRules, getSwitchConfig, isValidTab } from '@/utils'
+import {
+  getStaticResourceRules,
+  getSwitchConfig,
+  getApiSwitch,
+  getApiRules,
+  isValidTab
+} from '@/utils'
 import { EVENT_MESSAGE_ACTION } from '@/enum'
 
 export default defineBackground(() => {
   let standaloneTabId: number | undefined = undefined
 
-  const setBadgeStatus = async () => {
-    let shouldShowBadge = await getSwitchConfig()
+  const updateBadgeStatus = async () => {
+    const shouldShowBadge = (await getSwitchConfig()) || (await getApiSwitch())
+    let existingRules = []
     if (shouldShowBadge) {
-      const existingRules = await browser.declarativeNetRequest.getDynamicRules()
-      shouldShowBadge = !isEmpty(existingRules)
+      existingRules = await browser.declarativeNetRequest.getDynamicRules()
     }
-    browser.action.setBadgeText({ text: shouldShowBadge ? '1' : '' })
+    browser.action.setBadgeText({ text: existingRules.length > 0 ? `${existingRules.length}` : '' })
   }
 
   const updateRules = async () => {
@@ -22,27 +28,27 @@ export default defineBackground(() => {
       await browser.declarativeNetRequest.updateDynamicRules({ removeRuleIds })
     }
 
-    const switchEnabled = await getSwitchConfig()
-    if (!switchEnabled) return
-    const addRules = getStaticResourceRules(await getConfig())
+    const addRules = [...(await getStaticResourceRules()), ...(await getApiRules())]
+    console.log('addRules', addRules)
     if (isEmpty(addRules)) return
     await browser.declarativeNetRequest.updateDynamicRules({ addRules })
   }
 
-  ;(async () => {
+  const init = async () => {
     await updateRules()
-    await setBadgeStatus()
-  })()
+    await updateBadgeStatus()
+  }
 
-  browser.storage.onChanged.addListener(async (_, areaName) => {
-    if (areaName !== 'local') return
-    await updateRules()
-    await setBadgeStatus()
-  })
+  init()
 
   browser.runtime.onInstalled.addListener(() => {
     browser.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
     browser.action.setBadgeTextColor({ color: '#e63757' })
+  })
+
+  browser.storage.onChanged.addListener(async (_, areaName) => {
+    if (areaName !== 'local') return
+    init()
   })
 
   browser.runtime.onMessage.addListener(async (message, sender) => {

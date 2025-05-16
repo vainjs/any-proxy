@@ -21,9 +21,19 @@ export const saveConfig = debounce(async (configJson?: string) => {
   }
 }, 1500)
 
-export function getStaticResourceRules(config: ProxyConfig) {
+export function saveSwitchConfig(value: boolean) {
+  storage.setItem(`local:${STATIC_STORAGE_SWITCH_KEY}`, value)
+}
+
+export async function getSwitchConfig() {
+  return (await storage.getItem<boolean>(`local:${STATIC_STORAGE_SWITCH_KEY}`)) ?? false
+}
+
+export async function getStaticResourceRules() {
+  const switchEnabled = await getSwitchConfig()
+  if (!switchEnabled) return []
   return reduce(
-    get(config, 'proxy', []),
+    get(await getConfig(), 'proxy', []),
     (prev, rule, index) => {
       const [regexFilter, regexSubstitution] = rule
       if (!regexFilter || !regexSubstitution) return prev
@@ -47,12 +57,4 @@ export function getStaticResourceRules(config: ProxyConfig) {
     },
     [] as Browser.declarativeNetRequest.Rule[]
   )
-}
-
-export function saveSwitchConfig(value: boolean) {
-  storage.setItem(`local:${STATIC_STORAGE_SWITCH_KEY}`, value)
-}
-
-export async function getSwitchConfig() {
-  return (await storage.getItem<boolean>(`local:${STATIC_STORAGE_SWITCH_KEY}`)) ?? false
 }
