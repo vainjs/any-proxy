@@ -1,16 +1,13 @@
 import type { InterceptRule } from '../type'
-import { storage } from '#imports'
-import { API_STORAGE_KEY } from '../enum'
+import { debounce, filter } from 'lodash-es'
+import { API_STORAGE_KEY, API_STORAGE_SWITCH_KEY } from '../enum'
 
 export const DEFAULT_RULE: InterceptRule = {
-  pattern: 'api.example.com/test',
+  pattern: 'http://api.example.com/test',
   enabled: true,
   response: {
     status: 200,
-    data: { message: 'This is a mocked response' },
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    data: { message: 'This is a mocked response' }
   }
 }
 
@@ -36,24 +33,25 @@ export const VALIDATION_RULES = {
   ]
 }
 
-export function createResponse(rule: InterceptRule): Response {
-  const responseBody = JSON.stringify(rule.response.data)
-  const headers = new Headers({
-    'Content-Type': 'application/json',
-    ...rule.response.headers
-  })
-
-  return new Response(responseBody, {
-    status: rule.response.status,
-    headers: headers
-  })
-}
-
-export async function saveRules(rules: InterceptRule[]) {
+export const saveRules = debounce(async (rules: InterceptRule[]) => {
   await storage.setItem(`local:${API_STORAGE_KEY}`, rules)
-}
+}, 1500)
 
 export async function getRules() {
   const rules = await storage.getItem(`local:${API_STORAGE_KEY}`)
   return (rules || []) as InterceptRule[]
+}
+
+export function saveApiSwitch(value: boolean) {
+  storage.setItem(`local:${API_STORAGE_SWITCH_KEY}`, value)
+}
+
+export async function getApiSwitch() {
+  return (await storage.getItem<boolean>(`local:${API_STORAGE_SWITCH_KEY}`)) ?? false
+}
+
+export async function getApiRules() {
+  const switchEnabled = await getApiSwitch()
+  if (!switchEnabled) return []
+  return filter(await getRules(), ['enabled', true])
 }

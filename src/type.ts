@@ -5,9 +5,8 @@ export type InterceptRule = {
   enabled: boolean
   pattern: string
   response: {
-    status: number
+    status?: number
     data: any
-    headers?: Record<string, string>
   }
 }
 

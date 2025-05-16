@@ -12,7 +12,15 @@ export default defineConfig({
     name: 'AnyProxy',
     action: {
       default_title: '__MSG_actionTitle__'
-    }
+    },
+    content_scripts: [
+      {
+        matches: ['<all_urls>'],
+        js: ['content-scripts/content.js'],
+        run_at: 'document_start',
+        all_frames: true
+      }
+    ]
   },
   vite: () => ({
     plugins: [vuetify()]
