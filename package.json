@@ -1,6 +1,6 @@
 {
   "name": "@vainjs/any-proxy",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "description": "Easily redirect network resources without needing to update the server.",
   "type": "module",
