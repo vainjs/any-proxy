@@ -2,7 +2,7 @@ export * from './static-resource'
 export * from './api-proxy'
 
 /**
- * 将类 JSON 字符串转换为标准 JSON 字符串
+ * Convert JSON-like strings to standard JSON strings
  */
 export function normalizeJSON(input?: string): string {
   if (!input) return ''
@@ -10,23 +10,23 @@ export function normalizeJSON(input?: string): string {
     return JSON.stringify(JSON.parse(input), null, 2)
   } catch {
     try {
-      // 只移除关键位置的空白字符，保留值中的空格
+      // Only remove whitespace at key positions, preserve spaces in values
       let normalized = input.replace(/({|,|\[)\s+|\s+(?=}|\]|:)/g, '$1')
-      // 处理未加引号的键
+      // Handle unquoted keys
       normalized = normalized.replace(/({|,)([a-zA-Z0-9_$]+?):/g, '$1"$2":')
-      // 处理单引号
+      // Handle single quotes
       normalized = normalized.replace(/'([^']*)'(?=\s*[,}\]])/g, '"$1"')
-      // 处理末尾的逗号
+      // Handle trailing commas
       normalized = normalized.replace(/,\s*([}\]])/g, '$1')
       return JSON.stringify(JSON.parse(normalized), null, 2)
-    } catch (e) {
+    } catch {
       throw new Error('Invalid JSON-like string')
     }
   }
 }
 
 /**
- * 压缩 JSON 字符串，移除所有空白字符
+ * Compress JSON string, remove all whitespace characters
  */
 export function compressJSON(input?: string): string {
   if (!input) return ''
@@ -37,7 +37,7 @@ export function compressJSON(input?: string): string {
   }
 }
 
-export function formatJson(json: Record<string, any>) {
+export function formatJson(json: Record<string, unknown>) {
   try {
     return JSON.stringify(json, null, 2)
   } catch {
@@ -58,7 +58,10 @@ export async function isValidTab(tabId?: number) {
 }
 
 export function openHelp() {
-  window.open('https://github.com/vainjs/any-proxy/blob/main/README.md', '_blank')
+  window.open(
+    'https://github.com/vainjs/any-proxy/blob/main/README.md',
+    '_blank'
+  )
 }
 
 export function openFeedback() {

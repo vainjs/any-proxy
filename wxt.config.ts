@@ -11,18 +11,25 @@ export default defineConfig({
     default_locale: 'en',
     name: 'AnyProxy',
     action: {
-      default_title: '__MSG_actionTitle__'
+      default_title: '__MSG_actionTitle__',
     },
     content_scripts: [
       {
         matches: ['<all_urls>'],
+        js: ['content-main.js'],
+        run_at: 'document_start',
+        world: 'MAIN',
+        all_frames: true,
+      },
+      {
+        matches: ['<all_urls>'],
         js: ['content-scripts/content.js'],
         run_at: 'document_start',
-        all_frames: true
-      }
-    ]
+        all_frames: true,
+      },
+    ],
   },
   vite: () => ({
-    plugins: [vuetify()]
-  })
+    plugins: [vuetify()],
+  }),
 })

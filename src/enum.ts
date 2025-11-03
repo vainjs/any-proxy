@@ -5,20 +5,7 @@ export const API_STORAGE_KEY = 'API_INTERCEPT_RULES'
 
 export enum EVENT_MESSAGE_ACTION {
   CLOSE_SIDE_PANEL = 'CLOSE_SIDE_PANEL',
-  OPEN_SIDE_PANEL = 'OPEN_SIDE_PANEL'
+  OPEN_SIDE_PANEL = 'OPEN_SIDE_PANEL',
+  REQUEST_API_RULES = 'REQUEST_API_RULES',
+  UPDATE_API_RULES = 'UPDATE_API_RULES',
 }
-
-export const MENU_ITEMS = [
-  {
-    label: i18n.t('staticResources'),
-    icon: 'mdi-xml',
-    path: '/'
-  },
-  {
-    label: i18n.t('api'),
-    icon: 'mdi-api',
-    path: '/api'
-  }
-]
-
-export const MENU_SIZE = 40

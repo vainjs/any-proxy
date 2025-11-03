@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import { EVENT_MESSAGE_ACTION, MENU_ITEMS, MENU_SIZE } from '@/enum'
+import { MENU_ITEMS, MENU_SIZE } from '@/constant'
 import { openHelp, openFeedback } from '@/utils'
+import { EVENT_MESSAGE_ACTION, } from '@/enum'
 
 const openFullscreen = () => {
   browser.runtime.sendMessage({ action: EVENT_MESSAGE_ACTION.CLOSE_SIDE_PANEL })
@@ -55,10 +56,16 @@ const openFullscreen = () => {
 </template>
 
 <style lang="scss" module>
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 .container {
   display: flex;
   height: 100%;
-  padding: 4px 0 4px 4px;
 }
 
 .main {
@@ -74,6 +81,7 @@ const openFullscreen = () => {
   flex-direction: column;
   padding: 6px 0;
   gap: 4px;
+  border-left: solid 1px rgba(5, 5, 5, 0.06);
 
   .tabs {
     flex: 1;

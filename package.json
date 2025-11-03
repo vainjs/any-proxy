@@ -2,21 +2,31 @@
   "name": "@vainjs/any-proxy",
   "version": "0.4.0",
   "private": true,
-  "packageManager": "pnpm@9.12.1",
   "description": "Easily redirect network resources without needing to update the server.",
   "type": "module",
   "scripts": {
-    "dev": "wxt",
-    "dev:firefox": "wxt -b firefox",
     "build": "wxt build",
     "build:firefox": "wxt build -b firefox",
-    "zip": "wxt zip",
-    "zip:firefox": "wxt zip -b firefox",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "compile": "vue-tsc --noEmit",
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
     "preinstall": "npx only-allow pnpm",
     "postinstall": "wxt prepare",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-    "prepare": "husky"
+    "prepare": "husky",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.18.6",
@@ -39,30 +49,18 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@rushstack/eslint-patch": "^1.10.5",
     "@types/lodash-es": "^4.17.12",
-    "@vue/eslint-config-prettier": "^9.0.0",
-    "@vue/eslint-config-typescript": "^13.0.0",
+    "@vainjs/eslint-config": "latest",
     "conventional-changelog-cli": "^5.0.0",
-    "eslint": "^8.57.1",
-    "eslint-plugin-import": "^2.31.0",
+    "eslint": "^9.32.0",
     "eslint-plugin-vue": "^9.32.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.1.6",
-    "prettier": "^3.4.2",
+    "lint-staged": "^16.1.4",
+    "prettier": "^3.6.2",
     "sass": "^1.83.4",
-    "typescript": "^5.7.3",
+    "typescript": "^5.3.3",
     "vite-plugin-vuetify": "^2.1.0",
     "vue-tsc": "^2.2.0"
   },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js}": [
-      "eslint --fix"
-    ]
-  }
+  "packageManager": "pnpm@10.14.0"
 }
