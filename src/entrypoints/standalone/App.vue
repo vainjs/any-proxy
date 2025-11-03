@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import { EVENT_MESSAGE_ACTION, MENU_ITEMS } from '@/enum'
+import { EVENT_MESSAGE_ACTION, } from '@/enum'
+import { MENU_ITEMS } from '@/constant'
 
 const closeWindow = () => {
   browser.runtime.sendMessage({ action: EVENT_MESSAGE_ACTION.OPEN_SIDE_PANEL })
@@ -31,16 +32,22 @@ const closeWindow = () => {
 </template>
 
 <style lang="scss" module>
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 .container {
   display: flex;
-  gap: 12px;
   height: 100%;
 }
 
 .main {
   flex: 1;
   width: 0;
-  padding: 12px 6px;
+  padding: 12px;
   background: #fff;
 }
 
@@ -49,6 +56,7 @@ const closeWindow = () => {
   display: flex;
   flex-direction: column;
   background: #fff;
+  border-right: solid 1px rgba(5, 5, 5, 0.06);
 
   .title {
     font-size: 16px;

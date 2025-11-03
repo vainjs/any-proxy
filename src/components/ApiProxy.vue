@@ -3,7 +3,7 @@ import { type InterceptRule } from '@/type'
 import cls from 'classnames'
 import { ref } from 'vue'
 import { saveRules, getRules, DEFAULT_RULE, getApiSwitch, saveApiSwitch } from '@/utils'
-import { MENU_SIZE } from '@/enum'
+import { MENU_SIZE } from '@/constant'
 import ApiRuleDialog from './ApiRuleDialog.vue'
 import Confirm from './VConfirm.vue'
 

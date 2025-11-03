@@ -11,6 +11,17 @@ const props = defineProps<{
   isEdit?: boolean
 }>()
 
+const HTTP_METHODS = [
+  { title: 'ALL', value: 'ALL' },
+  { title: 'GET', value: 'GET' },
+  { title: 'POST', value: 'POST' },
+  { title: 'PUT', value: 'PUT' },
+  { title: 'DELETE', value: 'DELETE' },
+  { title: 'PATCH', value: 'PATCH' },
+  { title: 'HEAD', value: 'HEAD' },
+  { title: 'OPTIONS', value: 'OPTIONS' }
+]
+
 const modelValue = defineModel<InterceptRule>({ default: {} })
 const modelVisible = defineModel<boolean>('visible')
 const form = ref()
@@ -49,11 +60,11 @@ const onOk = async () => {
           <div :class="$style.switch">
             <v-switch v-model="modelValue.enabled" color="primary" density="compact" hide-details />
           </div>
-          <v-text-field v-model="modelValue.pattern" :label="i18n.t('matchRule')" :rules="VALIDATION_RULES.pattern" />
-          <v-text-field v-model="modelValue.response.status" type="number" :label="i18n.t('status')"
-            :rules="VALIDATION_RULES.status" />
-          <v-text-field v-model="modelValue.description" :label="i18n.t('description')" />
-          <Codemirror v-model="responseData" />
+          <v-text-field v-model.trim="modelValue.pattern" :label="i18n.t('matchRule')"
+            :rules="VALIDATION_RULES.pattern" />
+          <v-select v-model="modelValue.method" :items="HTTP_METHODS" :label="i18n.t('method')" />
+          <v-text-field v-model.trim="modelValue.description" :label="i18n.t('description')" />
+          <Codemirror v-model="responseData" :class="$style.codemirror" />
         </v-form>
       </v-card-text>
       <v-divider />
@@ -69,5 +80,9 @@ const onOk = async () => {
 <style lang="scss" module>
 .switch {
   padding: 0px 6px 6px;
+}
+
+.codemirror {
+  height: 320px;
 }
 </style>
