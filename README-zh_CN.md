@@ -38,9 +38,18 @@ AnyProxy 是一个功能强大的 Chrome 扩展程序，让你能够轻松地重
 ```json
 {
   "proxy": [
-    ["https://developer.mozilla.org/static/js/chunk.js", "http://localhost:3000/js/proxy.js"],
-    ["https://developer.mozilla.org/(.*)/js/chunk.js", "http://localhost:3000/$1/proxy.js"],
-    ["https://developer.mozilla.org/(.*)/js/(.*).js", "http://localhost:3000/$1/$2.js"]
+    [
+      "https://developer.mozilla.org/static/js/chunk.js",
+      "http://localhost:3000/js/proxy.js"
+    ],
+    [
+      "https://developer.mozilla.org/(.*)/js/chunk.js",
+      "http://localhost:3000/$1/proxy.js"
+    ],
+    [
+      "https://developer.mozilla.org/(.*)/js/(.*).js",
+      "http://localhost:3000/$1/$2.js"
+    ]
   ]
 }
 ```

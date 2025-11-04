@@ -15,7 +15,6 @@ export default defineContentScript({
         window.fetch = createProxyFetch(NATIVE_FETCH, () => cachedRules)
         window.XMLHttpRequest = createProxyXHR(NATIVE_XHR, () => cachedRules)
         isProxyActive = true
-        console.log('✓ [AnyProxy] Proxy activated')
       }
     }
 
@@ -24,7 +23,6 @@ export default defineContentScript({
         window.fetch = NATIVE_FETCH
         window.XMLHttpRequest = NATIVE_XHR
         isProxyActive = false
-        console.log('✓ [AnyProxy] Proxy deactivated')
       }
     }
 

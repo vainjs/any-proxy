@@ -38,9 +38,45 @@ For detailed information, please refer to:
 ```json
 {
   "proxy": [
-    ["https://developer.mozilla.org/static/js/chunk.js", "http://localhost:3000/js/proxy.js"],
-    ["https://developer.mozilla.org/(.*)/js/chunk.js", "http://localhost:3000/$1/proxy.js"],
-    ["https://developer.mozilla.org/(.*)/js/(.*).js", "http://localhost:3000/$1/$2.js"]
+    [
+      "https://developer.mozilla.org/static/js/chunk.js",
+      "http://localhost:3000/js/proxy.js"
+    ],
+    [
+      "https://developer.mozilla.org/(.*)/js/chunk.js",
+      "http://localhost:3000/$1/proxy.js"
+    ],
+    [
+      "https://developer.mozilla.org/(.*)/js/(.*).js",
+      "http://localhost:3000/$1/$2.js"
+    ]
   ]
 }
+```
+
+## Architecture
+
+```mermaid
+graph TB
+    Storage["browser.storage.local"]
+    UI["UI Components"]
+    BG["background.ts"]
+    CT["content.ts"]
+    CM["content-main.ts"]
+
+    UI -->|"write config"| Storage
+    UI -->|"runtime.sendMessage"| BG
+
+    Storage -.->|"storage.onChanged"| BG
+    Storage -.->|"storage.onChanged"| CT
+
+    CT <-->|"window.postMessage"| CM
+
+    BG -.->|"manages"| DN["declarativeNetRequest"]
+    CM -.->|"intercepts"| NET["fetch / XHR"]
+
+    style Storage fill:#fff9c4,stroke:#f57f17,stroke-width:2px
+    style BG fill:#f3e5f5
+    style CT fill:#fff3e0
+    style CM fill:#e3f2fd
 ```

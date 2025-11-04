@@ -1,4 +1,4 @@
-name: Release
+name: Publish Web Extension
 
 on:
   workflow_dispatch:
@@ -85,5 +85,7 @@ jobs:
             For detailed changes and updates, please refer to the [CHANGELOG.md](https://github.com/vainjs/any-proxy/blob/main/CHANGELOG.md).
           draft: false
           prerelease: false
+          files: |
+            .output/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
